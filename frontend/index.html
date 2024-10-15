@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">    
 </head>
 <body>
     <h1>File Manager</h1>
-    <form id="uploadForm">
-        <input type="text" id="ownerName" placeholder="Owner Name" required>
-        <select id="fileType" required>
+    <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
+        <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
+        <select id="fileType" name="file_type" required>
             <option value="">Select File Type</option>
             <option value="image">Image</option>
             <option value="csv">CSV</option>
         </select>
-        <input type="date" id="uploadDate" required>
-        <input type="file" id="file" required>
+        <input type="date" id="uploadDate" name="upload_date" required>
+        <input type="file" id="file" name="file" required>
         <button type="submit">Upload File</button>
     </form>
 
@@ -34,8 +34,7 @@
 
     <h2>Results</h2>
     <ul id="results"></ul>
-
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
 

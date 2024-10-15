@@ -7,13 +7,22 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     formData.append('file_type', document.getElementById('fileType').value);
     formData.append('upload_date', document.getElementById('uploadDate').value);
 
-    const response = await fetch('/api/files/upload', {
-        method: 'POST',
-        body: formData,
-    });
+    try {
+        const response = await fetch('/api/files/upload', {
+            method: 'POST',
+            body: formData,
+        });
 
-    const result = await response.json();
-    alert(result.message);
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            alert(`Error: ${errorMessage}`);
+        } else {
+            const result = await response.json();
+            alert(result.message);
+        }
+    } catch (error) {
+        alert(`Upload failed: ${error.message}`);
+    }
 });
 
 document.getElementById('searchForm').addEventListener('submit', async (e) => {
@@ -24,17 +33,22 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
     const upload_date = document.getElementById('searchDate').value;
 
     const queryString = new URLSearchParams({ owner_name, file_type, upload_date }).toString();
-    const response = await fetch(`/api/files/search?${queryString}`);
-    const files = await response.json();
+    
+    try {
+        const response = await fetch(`/api/files/search?${queryString}`);
+        const files = await response.json();
 
-    const results = document.getElementById('results');
-    results.innerHTML = '';
-    files.forEach(file => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${file.owner_name} - ${file.file_type} - <a href="/api/files/download/${file._id}">Download</a>
-        `;
-        results.appendChild(li);
-    });
+        const results = document.getElementById('results');
+        results.innerHTML = '';
+        files.forEach(file => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${file.owner_name} - ${file.file_type} - <a href="/api/files/download/${file._id}">Download</a>
+            `;
+            results.appendChild(li);
+        });
+    } catch (error) {
+        alert(`Search failed: ${error.message}`);
+    }
 });
 
