@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>File Manager</h1>
+    <form id="uploadForm">
+        <input type="text" id="ownerName" placeholder="Owner Name" required>
+        <select id="fileType" required>
+            <option value="">Select File Type</option>
+            <option value="image">Image</option>
+            <option value="csv">CSV</option>
+        </select>
+        <input type="date" id="uploadDate" required>
+        <input type="file" id="file" required>
+        <button type="submit">Upload File</button>
+    </form>
+
+    <h2>Search Files</h2>
+    <form id="searchForm">
+        <input type="text" id="searchOwner" placeholder="Owner Name">
+        <select id="searchType">
+            <option value="">Select File Type</option>
+            <option value="image">Image</option>
+            <option value="csv">CSV</option>
+        </select>
+        <input type="date" id="searchDate">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Results</h2>
+    <ul id="results"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
