@@ -1,0 +1,19 @@
+# Project configuration
+
+[server]
+host = "127.0.0.1"
+port = 5000
+
+[database]
+MONGO_URI = "mongodb://localhost:27017/filemanager"
+
+[paths]
+upload_folder = "./uploads"
+
+[logging]
+level = "INFO"
+
+[project]
+name = "DataManager"
+version = "1.0.0"
+

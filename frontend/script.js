@@ -33,20 +33,32 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
     const upload_date = document.getElementById('searchDate').value;
 
     const queryString = new URLSearchParams({ owner_name, file_type, upload_date }).toString();
-    
+
     try {
         const response = await fetch(`/api/files/search?${queryString}`);
         const files = await response.json();
 
         const results = document.getElementById('results');
         results.innerHTML = '';
+
         files.forEach(file => {
+            console.log('Current file:', file); // Log the entire file object for debugging
+        
+            // Use the 'id' property to get the fileId
+            const fileId = file.id ? file.id : ''; // Update to use 'id'
+        
+            // Print the file_id to the terminal
+            console.log(`File ID: ${fileId}`); // This will print the file ID to the terminal
+        
             const li = document.createElement('li');
             li.innerHTML = `
-                ${file.owner_name} - ${file.file_type} - <a href="/api/files/download/${file._id}">Download</a>
+                ${file.owner_name} - ${file.file_type} - 
+                <a href="/api/files/download/${fileId}">Download</a>
             `;
             results.appendChild(li);
         });
+
+
     } catch (error) {
         alert(`Search failed: ${error.message}`);
     }
