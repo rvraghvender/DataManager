@@ -3,37 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Manager</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">    
+    <title>DataManager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>File Manager</h1>
-    <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
-        <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
-        <select id="fileType" name="file_type" required>
-            <option value="">Select File Type</option>
-            <option value="image">Image</option>
-            <option value="csv">CSV</option>
-        </select>
-        <input type="date" id="uploadDate" name="upload_date" required>
-        <input type="file" id="file" name="file" required>
-        <button type="submit">Upload File</button>
-    </form>
+    <header>
+        <h1>DataManager</h1>
+    </header>
 
-    <h2>Search Files</h2>
-    <form id="searchForm">
-        <input type="text" id="searchOwner" placeholder="Owner Name">
-        <select id="searchType">
-            <option value="">Select File Type</option>
-            <option value="image">Image</option>
-            <option value="csv">CSV</option>
-        </select>
-        <input type="date" id="searchDate">
-        <button type="submit">Search</button>
-    </form>
+    <div class="container">
+        <div class="box" id="uploadBox">
+            <h2>Upload</h2>
+            <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
+                <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
+                <select id="fileType" name="file_type" required>
+                    <option value="">Select File Type</option>
+                    <option value="image">Image</option>
+                    <option value="csv">CSV</option>
+                </select>
+                <input type="date" id="uploadDate" name="upload_date" required>
+                <input type="file" id="file" name="file" required>
+                <button type="submit">Upload File</button>
+            </form>
+        </div>
 
-    <h2>Results</h2>
-    <ul id="results"></ul>
+        <div class="box" id="searchBox">
+            <h2>Search</h2>
+            <form id="searchForm">
+                <input type="text" id="searchOwner" placeholder="Owner Name">
+                <select id="searchType">
+                    <option value="">Select File Type</option>
+                    <option value="image">Image</option>
+                    <option value="csv">CSV</option>
+                </select>
+                <input type="date" id="searchDate">
+                <button type="submit">Search</button>
+            </form>
+
+            <h2>Results</h2>
+            <ul id="results"></ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Software made by Raghvender for Arnaud's group</p>
+    </footer>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -46,13 +46,16 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
         
             // Use the 'id' property to get the fileId
             const fileId = file.id ? file.id : ''; // Update to use 'id'
+		
+	    const fileName = file.filename ? file.filename : 'Unknown';
+
         
             // Print the file_id to the terminal
-            console.log(`File ID: ${fileId}`); // This will print the file ID to the terminal
+            console.log(`File ID: ${fileId}, File Name: ${fileName}`); // This will print the file ID to the terminal
         
             const li = document.createElement('li');
             li.innerHTML = `
-                ${file.owner_name} - ${file.file_type} - 
+                ${file.owner_name} - ${file.file_type} - ${fileName} -  
                 <a href="/api/files/download/${fileId}">Download</a>
             `;
             results.appendChild(li);
