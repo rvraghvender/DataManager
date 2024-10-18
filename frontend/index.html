@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataManager</title>
+    <title>Data Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -22,7 +22,7 @@
                     <option value="csv">CSV</option>
                 </select>
                 <input type="date" id="uploadDate" name="upload_date" required>
-                <input type="file" id="file" name="file" required>
+                <input type="file" id="file" name="files" multiple required>
                 <button type="submit">Upload File</button>
             </form>
         </div>

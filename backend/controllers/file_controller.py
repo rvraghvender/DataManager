@@ -8,45 +8,52 @@ from config.config import UPLOAD_FOLDER
 from datetime import datetime
 
 def upload_file():
-    if 'file' not in request.files:
+    if 'files' not in request.files:
         return jsonify(message='No file part'), 400
     
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify(message='No selected file'), 400
+    files = request.files.getlist('files')
 
-    # Save the file to the server
-    file_path = os.path.abspath(os.path.join("./uploads", file.filename))
-    file.save(file_path)
+    if len(files) == 0:
+        return jsonify(message='No files selected'), 400
 
+    upload_results = []
 
-    owner_name = request.form['owner_name']
-    file_type = request.form['file_type']
-    file_date = request.form['upload_date']
-    #filename = secure_filename(file.filename)
-    filename = file.filename
+    for file in files:
+        if file.filename == '':
+            return jsonify(message="No selected file"), 400
+        
+        # Save the file to the server
+        file_path = os.path.abspath(os.path.join(UPLOAD_FOLDER, file.filename))
+        file.save(file_path)
 
-    # Convert upload_date to a datetime object
-    try:
-        upload_date = datetime.strptime(file_date, '%Y-%m-%d')  # Convert to datetime
-    except ValueError:
-        return jsonify(message='Invalid date format. Use YYYY-MM-DD'), 400
+        owner_name = request.form['owner_name']
+        file_type = request.form['file_type']
+        file_date = request.form['upload_date']
+        filename = secure_filename(file.filename)
 
-    # Collect metadata
-    file_data = {
-        'file_name' : filename,
-        'owner_name':owner_name,
-        'file_type': file_type,
-        'upload_date': upload_date,
-        'file_path': file_path,
-    }
+        # Convert upload_date to a datetime object
+        try:
+            upload_date = datetime.strptime(file_date, '%Y-%m-%d')  # Convert to datetime
+        except ValueError:
+            return jsonify(message='Invalid date format. Use YYYY-MM-DD'), 400
 
-    try:
-        files_collection.insert_one(file_data)
-        return jsonify(message='File uploaded successfully'), 201
-    except Exception as e:
-        logging.error(f'Error inserting file data: {str(e)}')
-        return jsonify(message='Error inserting file data into the database'), 500
+        # Collect metadata
+        file_data = {
+            'file_name' : filename,
+            'owner_name':owner_name,
+            'file_type': file_type,
+            'upload_date': upload_date,
+            'file_path': file_path,
+        }
+
+        try:
+            files_collection.insert_one(file_data)
+            upload_results.append(f'{filename} uploaded successfully')
+        except Exception as e:
+            logging.error(f'Error inserting file data for {filename}: {str(e)}')
+            return jsonify(message=f'Error inserting file data for {filename} into the database'), 500
+    
+    return jsonify(message='Files uploaded successfully', results=upload_results), 201
 
 
 def search_files():

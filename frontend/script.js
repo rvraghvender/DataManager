@@ -3,7 +3,13 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('file', document.getElementById('file').files[0]);
+    const files = document.getElementById('file').files;
+
+    // Append all selected files
+    for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
+    }
+
     formData.append('owner_name', document.getElementById('ownerName').value);
     formData.append('file_type', document.getElementById('fileType').value);
     formData.append('upload_date', document.getElementById('uploadDate').value);
@@ -25,6 +31,8 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         alert(`Upload failed: ${error.message}`);
     }
 });
+
+
 
 // Search functionality with date range
 document.getElementById('searchForm').addEventListener('submit', async (e) => {
