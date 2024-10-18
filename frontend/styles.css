@@ -22,6 +22,7 @@ h1 {
 
 .container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     margin-bottom: 20px;
 }
@@ -33,6 +34,7 @@ h1 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 45%;
     transition: transform 0.2s;
+    margin-bottom: 20px;
 }
 
 .box:hover {
@@ -45,6 +47,7 @@ h2 {
     padding-bottom: 10px;
 }
 
+/* Form input styling */
 input[type="text"],
 input[type="date"],
 select {
@@ -69,10 +72,60 @@ button:hover {
     background-color: #22223b;
 }
 
+/* Search Results Styling */
+ul#results {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul#results li {
+    padding: 15px;
+    background-color: #fff;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+ul#results li a {
+    color: #4a4e69;
+    text-decoration: none;
+}
+
+ul#results li a:hover {
+    text-decoration: underline;
+}
+
 footer {
     text-align: center;
     margin-top: 30px;
     font-size: 0.9em;
     color: #777;
+}
+
+/* Date Range Styling */
+#searchForm input[type="date"] {
+    display: inline-block;
+    width: 48%;
+    margin-right: 4%;
+}
+
+#searchForm input[type="date"]:last-child {
+    margin-right: 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        width: 90%;
+    }
+
+    #searchForm input[type="date"] {
+        width: 100%;
+        margin: 10px 0;
+    }
 }
 

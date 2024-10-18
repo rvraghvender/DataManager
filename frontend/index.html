@@ -31,12 +31,15 @@
             <h2>Search</h2>
             <form id="searchForm">
                 <input type="text" id="searchOwner" placeholder="Owner Name">
-                <select id="searchType">
+                <select id="searchType" name="file_type">
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
                     <option value="csv">CSV</option>
                 </select>
-                <input type="date" id="searchDate">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="start_date">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="end_date">
                 <button type="submit">Search</button>
             </form>
 
