@@ -8,57 +8,78 @@ from config.config import UPLOAD_FOLDER
 from datetime import datetime
 
 def upload_file():
-    if 'files' not in request.files:
-        return jsonify(message='No file part'), 400
-    
-    files = request.files.getlist('files')
-
-    if len(files) == 0:
-        return jsonify(message='No files selected'), 400
-
-    upload_results = []
-
-    for file in files:
-        if file.filename == '':
-            return jsonify(message="No selected file"), 400
+    try:
+        if 'files' not in request.files:
+            logging.error('No files part in the request')
+            return jsonify(message='No file part'), 400
         
-        # Save the file to the server
-        file_path = os.path.abspath(os.path.join(UPLOAD_FOLDER, file.filename))
-        file.save(file_path)
+        files = request.files.getlist('files')
 
-        owner_name = request.form['owner_name']
-        file_type = request.form['file_type']
-        file_date = request.form['upload_date']
-        filename = secure_filename(file.filename)
+        if len(files) == 0:
+            loggig.error('No files selected')
+            return jsonify(message='No files selected'), 400
 
-        # Convert upload_date to a datetime object
-        try:
-            upload_date = datetime.strptime(file_date, '%Y-%m-%d')  # Convert to datetime
-        except ValueError:
-            return jsonify(message='Invalid date format. Use YYYY-MM-DD'), 400
+        upload_results = []
+        
 
-        # Collect metadata
-        file_data = {
-            'file_name' : filename,
-            'owner_name':owner_name,
-            'file_type': file_type,
-            'upload_date': upload_date,
-            'file_path': file_path,
-        }
+        print(request.form) ##
 
-        try:
-            files_collection.insert_one(file_data)
-            upload_results.append(f'{filename} uploaded successfully')
-        except Exception as e:
-            logging.error(f'Error inserting file data for {filename}: {str(e)}')
-            return jsonify(message=f'Error inserting file data for {filename} into the database'), 500
+        for file in files:
+            if file.filename == '':
+                logging.error('Files with no filename selected')
+                return jsonify(message="No selected file"), 400
+            
+            # Save the file to the server
+            file_path = os.path.abspath(os.path.join(UPLOAD_FOLDER, file.filename))
+            file.save(file_path)
+
+            owner_name = request.form['owner_name']
+            label_name = request.form['label_name']
+            file_type = request.form['file_type']
+            data_generator = request.form['data_generator']
+            chemistry = request.form['chemistry']
+            file_date = request.form['upload_date']
+            description = request.form['description']
+            filename = secure_filename(file.filename)
+
+            # Convert upload_date to a datetime object
+            try:
+                upload_date = datetime.strptime(file_date, '%Y-%m-%d')  # Convert to datetime
+            except ValueError:
+                return jsonify(message='Invalid date format. Use YYYY-MM-DD'), 400
+
+            # Collect metadata
+            file_data = {
+                'file_name' : filename,
+                'owner_name':owner_name,
+                'label_name' : label_name,
+                'file_type': file_type,
+                'data_generator' : data_generator,
+                'chemistry' : chemistry,
+                'upload_date': upload_date,
+                'file_path': file_path,
+                'description' : description
+            }
+
+            try:
+                files_collection.insert_one(file_data)
+                upload_results.append(f'{filename} uploaded successfully')
+            except Exception as e:
+                logging.error(f'Error inserting file data for {filename}: {str(e)}')
+                return jsonify(message=f'Error inserting file data for {filename} into the database'), 500
+        
+        return jsonify(message='Files uploaded successfully', results=upload_results), 201
     
-    return jsonify(message='Files uploaded successfully', results=upload_results), 201
-
+    except Exception as e:
+        logging.error(f'Exception occured during file upload: {str(e)}')
+        return jsonify(message=f'An error occured: {str(e)}')
 
 def search_files():
     owner_name = request.args.get('owner_name')
+    label_name = request.args.get('label_name')
     file_type = request.args.get('file_type')
+    data_generator = request.args.get('data_generator')
+    chemistry = request.args.get('chemistry')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
 
@@ -66,8 +87,15 @@ def search_files():
     query = {}
     if owner_name:
         query['owner_name'] = owner_name
+    if label_name:
+        query['label_name'] = label_name
     if file_type:
         query['file_type'] = file_type
+    if data_generator:
+        query['data_generator'] = data_generator
+    if chemistry:
+        query['chemistry'] = chemistry
+
     if start_date and end_date:
         try:
             start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -83,7 +111,10 @@ def search_files():
                 'id': str(file['_id']),
                 'filename': file['file_name'],
                 'owner_name': file['owner_name'],
+                'label_name' : file['label_name'],
                 'file_type': file['file_type'],
+                'data_generator': file['data_generator'],
+                'chemistry': file['chemistry'],
                 'upload_date': file['upload_date'].strftime('%Y-%m-%d'),  # Format date for readability
             }
             for file in files

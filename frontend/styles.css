@@ -129,3 +129,17 @@ footer {
     }
 }
 
+.date-fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-fields label {
+    margin-right: 5px;
+}
+
+.date-fields input[type="date"] {
+    width: 150px; /* Adjust width as needed */
+}
+

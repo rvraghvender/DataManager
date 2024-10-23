@@ -1,45 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
     <header>
-        <h1>DataManager</h1>
+        <h1>Data Manager</h1>
     </header>
 
     <div class="container">
+
         <div class="box" id="uploadBox">
             <h2>Upload</h2>
             <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
+
                 <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
-                <select id="fileType" name="file_type" required>
+		<input type="text" id="labelName" name="label_name" placeholder="Label Name" required> <!--M-->
+
+		<select id="fileType" name="file_type" required>
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
                     <option value="csv">CSV</option>
+		    <option value="other">Other</option> <!--M-->
                 </select>
-                <input type="date" id="uploadDate" name="upload_date" required>
-                <input type="file" id="file" name="files" multiple required>
+
+
+		<select id="dataGenerator" name="data_generator" required>
+                    <option value="">Data Generator</option>
+                    <option value="eMicroscopy">Electron microscopy</option>
+                    <option value="eChemistry">Electronic chemistry</option>
+                    <option value="synchrotron">Synchrotron</option>
+                    <option value="simulation">Simulation</option>
+		    <option value="other">Other</option> <!--M-->
+                </select>
+
+
+		<select id="chemistry" name="chemistry" required>
+                    <option value="">Chemistry</option>
+                    <option value="nmc">NMC</option>
+                    <option value="lfp">LFP</option>
+		    <option value="other">Other</option> <!--M-->
+                </select>
+                
+		<input type="date" id="uploadDate" name="upload_date" required>
+                
+                <textarea id="description" name="description" placeholder="Enter a description..." rows="4" cols="95"></textarea> <!--M-->
+
+		<input type="file" id="file" name="files" multiple required>
                 <button type="submit">Upload File</button>
             </form>
         </div>
 
-        <div class="box" id="searchBox">
+        <!--------------------------------Search Box ----------------------------------------->
+        
+	<div class="box" id="searchBox">
             <h2>Search</h2>
             <form id="searchForm">
                 <input type="text" id="searchOwner" placeholder="Owner Name">
-                <select id="searchType" name="file_type">
+		<input type="text" id="labelName" name="label_name" placeholder="Label Name"> <!--M-->
+               
+		<select id="searchType" name="file_type">
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
                     <option value="csv">CSV</option>
+                    <option value="other">Other</option>
                 </select>
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate" name="start_date">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate" name="end_date">
+
+
+		<select id="dataGenerator" name="data_generator">
+                    <option value="">Data Generator</option>
+                    <option value="eMicroscopy">Electron microscopy</option>
+                    <option value="eChemistry">Electronic chemistry</option>
+                    <option value="synchrotron">Synchrotron</option>
+                    <option value="simulation">Simulation</option>
+		    <option value="other">Other</option> <!--M-->
+                </select>
+                
+		<select id="chemistry" name="chemistry">
+                    <option value="">Chemistry</option>
+                    <option value="nmc">NMC</option>
+                    <option value="lfp">LFP</option>
+		    <option value="other">Other</option> <!--M-->
+                </select>
+	
+		<div class="date-fields">
+			<label for="startDate">Start Date:</label>
+                	<input type="date" id="startDate" name="start_date">
+                	<label for="endDate">End Date:</label>
+                	<input type="date" id="endDate" name="end_date">
+		</div>
+
                 <button type="submit">Search</button>
             </form>
 

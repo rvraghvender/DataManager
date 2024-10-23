@@ -11,8 +11,12 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     }
 
     formData.append('owner_name', document.getElementById('ownerName').value);
+    formData.append('label_name', document.getElementById('labelName').value);
     formData.append('file_type', document.getElementById('fileType').value);
+    formData.append('data_generator', document.getElementById('dataGenerator').value);
+    formData.append('chemistry', document.getElementById('chemistry').value);
     formData.append('upload_date', document.getElementById('uploadDate').value);
+    formData.append('description', document.getElementById('description').value);
 
     try {
         const response = await fetch('/api/files/upload', {
@@ -39,7 +43,10 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const owner_name = document.getElementById('searchOwner').value;
+    const label_name = document.getElementById('labelName').value;
     const file_type = document.getElementById('searchType').value;
+    const data_generator = document.getElementById('dataGenerator').value;
+    const chemistry = document.getElementById('chemistry').value;
     const start_date = document.getElementById('startDate').value;
     const end_date = document.getElementById('endDate').value;
 
