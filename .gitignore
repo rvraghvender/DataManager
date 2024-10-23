@@ -163,3 +163,5 @@ cython_debug/
 
 
 uploads/
+data/
+logs/
