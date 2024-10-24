@@ -167,3 +167,19 @@ textarea {
     resize: vertical;    /* Allow users to resize vertically if desired */
 }
 
+#downloadAll {
+    display: block; /* Centers the button */
+    margin: 20px auto; /* Adds space above and below */
+    padding: 10px 20px; /* Increases size */
+    font-size: 16px; /* Increases font size */
+    background-color: #4a4e69 /* #007bff;  Button background color */
+    color: white; /* Button text color */
+    border: none; /* Removes border */
+    border-radius: 5px; /* Rounds the corners */
+    cursor: pointer; /* Changes cursor on hover */
+}
+
+#downloadAll:hover {
+    background-color: #22223b; /* #0056b3;  Darkens button on hover */
+}
+

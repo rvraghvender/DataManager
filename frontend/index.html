@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Include JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Include FileSaver.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
 <body>
@@ -114,12 +118,14 @@
 		    <th>Data Generator</th>
 		    <th>Chemistry</th>
 		    <th>Date</th>
-                    <th>Description</th>
+		    <th>File Name</th>
+		    <th>Description</th>
                     <th>Download Link</th>
                 </tr>
             </thead>
             <tbody id="results"></tbody>
-        </table>     
+        </table> 
+	<button id="downloadAll">Download All</button>
     </div>
 
 

@@ -87,6 +87,7 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
                     <td>${file.data_generator}</td>
                     <td>${file.chemistry}</td>
                     <td>${file.upload_date}</td>
+		    <td>${file.filename}</td>
                     <td>${description}</td>
                     <td><a href="/api/files/download/${fileId}" class="download-link">Download</a></td>
                 `;
@@ -98,5 +99,78 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
     } catch (error) {
         alert(`Search failed: ${error.message}`);
     }
+});
+
+
+// Download all files
+//document.getElementById('downloadAll').addEventListener('click', async () => {
+//    const results = document.querySelectorAll('#results li');
+//
+//    if (results.length === 0) {
+//        alert('No files to download.');
+//        return;
+//    }
+//
+//    // Create a zip file or handle the downloads here
+//    const zip = new JSZip(); // You might need to include JSZip library
+//    const folder = zip.folder("files");
+//
+//    results.forEach((li) => {
+//        const fileId = li.querySelector('a').getAttribute('href').split('/').pop();
+//        const fileName = li.innerText.split(' - ')[1]; // Extract the file name or any other identifier you want
+//
+//        // Here you would fetch the file content and add it to the zip
+//        // Assuming you have a function to fetch files by id
+//        fetch(`/api/files/download/${fileId}`)
+//            .then(response => response.blob())
+//            .then(blob => {
+//                folder.file(fileName, blob);
+//            });
+//    });
+//
+//    zip.generateAsync({ type: "blob" }).then((content) => {
+//        saveAs(content, "all_files.zip"); // You might need to include FileSaver.js library
+//    });
+//});
+
+
+// Download all files
+document.getElementById('downloadAll').addEventListener('click', async () => {
+    const results = document.querySelectorAll('#results tr');
+
+    if (results.length === 0) {
+        alert('No files to download.');
+        return;
+    }
+
+    const zip = new JSZip();
+    const folder = zip.folder("files");
+    const fetchPromises = [];
+
+    results.forEach((tr) => {
+        const fileId = tr.querySelector('a').getAttribute('href').split('/').pop();
+        const fileName = tr.children[6].innerText; // Adjust to get the file name
+
+        // Fetch each file and add to the zip
+        const fetchPromise = fetch(`/api/files/download/${fileId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                folder.file(fileName, blob);
+            });
+
+        fetchPromises.push(fetchPromise); // Collect the promise
+    });
+
+    // Wait for all fetches to complete
+    await Promise.all(fetchPromises);
+
+    zip.generateAsync({ type: "blob" }).then((content) => {
+        saveAs(content, "all_files.zip");
+    });
 });
 
