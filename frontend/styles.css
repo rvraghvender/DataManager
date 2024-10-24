@@ -143,3 +143,27 @@ footer {
     width: 150px; /* Adjust width as needed */
 }
 
+/* Tables   */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
+textarea {
+    width: 100%;          /* Make the textarea take the full width of its container */
+    height: auto;        /* Allow height to adjust automatically */
+    resize: vertical;    /* Allow users to resize vertically if desired */
+}
+

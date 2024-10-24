@@ -116,6 +116,7 @@ def search_files():
                 'data_generator': file['data_generator'],
                 'chemistry': file['chemistry'],
                 'upload_date': file['upload_date'].strftime('%Y-%m-%d'),  # Format date for readability
+                'description': file['description'],
             }
             for file in files
         ]

@@ -70,22 +70,30 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 
         const results = document.getElementById('results');
         results.innerHTML = '';
-
-        if (files.length === 0) {
-            results.innerHTML = '<li>No results found</li>'; // Display message when no files found
+        
+	if (files.length === 0) {
+            results.innerHTML = '<tr><td colspan="4">No results found</td></tr>'; 
         } else {
             files.forEach(file => {
                 const fileId = file.id ? file.id : '';
                 const fileName = file.filename ? file.filename : 'Unknown';
-
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    ${file.owner_name} - ${file.file_type} - ${fileName} -
-                    <a href="/api/files/download/${fileId}">Download</a>
+                const description = file.description ? file.description : 'No description available';
+        
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${file.owner_name}</td>
+                    <td>${file.label_name}</td>
+                    <td>${file.file_type}</td>
+                    <td>${file.data_generator}</td>
+                    <td>${file.chemistry}</td>
+                    <td>${file.upload_date}</td>
+                    <td>${description}</td>
+                    <td><a href="/api/files/download/${fileId}" class="download-link">Download</a></td>
                 `;
-                results.appendChild(li);
+                results.appendChild(tr);
             });
         }
+
 
     } catch (error) {
         alert(`Search failed: ${error.message}`);

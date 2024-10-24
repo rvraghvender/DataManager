@@ -49,7 +49,7 @@
                 
 		<input type="date" id="uploadDate" name="upload_date" required>
                 
-                <textarea id="description" name="description" placeholder="Enter a description..." rows="4" cols="95"></textarea> <!--M-->
+                <textarea id="description" name="description" placeholder="Enter a description..." rows="4"></textarea> <!--M-->
 
 		<input type="file" id="file" name="files" multiple required>
                 <button type="submit">Upload File</button>
@@ -98,11 +98,32 @@
                 <button type="submit">Search</button>
             </form>
 
-            <h2>Results</h2>
-            <ul id="results"></ul>
         </div>
+
     </div>
 
+    <!--------- Result --------->
+    <div>
+        <h2>Results</h2>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Owner Name</th>
+		    <th>Label Name</th>
+		    <th>File Type</th>
+		    <th>Data Generator</th>
+		    <th>Chemistry</th>
+		    <th>Date</th>
+                    <th>Description</th>
+                    <th>Download Link</th>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>     
+    </div>
+
+
+    <!---------Footer ----------->
     <footer>
         <p>Software made by Raghvender for Arnaud's group</p>
     </footer>
