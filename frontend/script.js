@@ -52,7 +52,10 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 
     const queryString = new URLSearchParams({
         owner_name,
+	label_name,
         file_type,
+	data_generator,
+	chemistry,
         start_date,
         end_date
     }).toString();
@@ -67,7 +70,6 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
         }
 
         const files = await response.json();
-
         const results = document.getElementById('results');
         results.innerHTML = '';
         
@@ -91,7 +93,8 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
                     <td>${description}</td>
                     <td><a href="/api/files/download/${fileId}" class="download-link">Download</a></td>
                 `;
-                results.appendChild(tr);
+                // results.appendChild(tr);
+                results.appendChild(createRow(file));
             });
         }
 
@@ -104,73 +107,96 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 
 // Download all files
 //document.getElementById('downloadAll').addEventListener('click', async () => {
-//    const results = document.querySelectorAll('#results li');
+//    const results = document.querySelectorAll('#results tr');
 //
 //    if (results.length === 0) {
 //        alert('No files to download.');
 //        return;
 //    }
 //
-//    // Create a zip file or handle the downloads here
-//    const zip = new JSZip(); // You might need to include JSZip library
+//    const zip = new JSZip();
 //    const folder = zip.folder("files");
+//    const fetchPromises = [];
 //
-//    results.forEach((li) => {
-//        const fileId = li.querySelector('a').getAttribute('href').split('/').pop();
-//        const fileName = li.innerText.split(' - ')[1]; // Extract the file name or any other identifier you want
+//    results.forEach((tr) => {
+//        const fileId = tr.querySelector('a').getAttribute('href').split('/').pop();
+//        const fileName = tr.children[6].innerText; // Adjust to get the file name
 //
-//        // Here you would fetch the file content and add it to the zip
-//        // Assuming you have a function to fetch files by id
-//        fetch(`/api/files/download/${fileId}`)
-//            .then(response => response.blob())
+//        // Fetch each file and add to the zip
+//        const fetchPromise = fetch(`/api/files/download/${fileId}`)
+//            .then(response => {
+//                if (!response.ok) {
+//                    throw new Error(`HTTP error! status: ${response.status}`);
+//                }
+//                return response.blob();
+//            })
 //            .then(blob => {
 //                folder.file(fileName, blob);
 //            });
+//
+//        fetchPromises.push(fetchPromise); // Collect the promise
 //    });
 //
+//    // Wait for all fetches to complete
+//    await Promise.all(fetchPromises);
+//
 //    zip.generateAsync({ type: "blob" }).then((content) => {
-//        saveAs(content, "all_files.zip"); // You might need to include FileSaver.js library
+//        saveAs(content, "all_files.zip");
 //    });
 //});
+//
 
+// Append a checkbox next to the download link for each file row
+function createRow(file) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>${file.owner_name}</td>
+        <td>${file.label_name}</td>
+        <td>${file.file_type}</td>
+        <td>${file.data_generator}</td>
+        <td>${file.chemistry}</td>
+        <td>${file.upload_date}</td>
+        <td>${file.filename}</td>
+        <td>${file.description}</td>
+        <td>
+            <a href="/api/files/download/${file.id}" class="download-link">Download</a>
+            <input type="checkbox" class="file-checkbox" data-file-id="${file.id}" data-file-name="${file.filename}">
+        </td>
+    `;
+    return tr;
+}
 
-// Download all files
+// Select/Deselect all files when "Select All" is clicked
+document.getElementById('selectAll').addEventListener('change', (event) => {
+    const isChecked = event.target.checked;
+    document.querySelectorAll('.file-checkbox').forEach(checkbox => {
+        checkbox.checked = isChecked;
+    });
+});
+
+// Download only selected files
 document.getElementById('downloadAll').addEventListener('click', async () => {
-    const results = document.querySelectorAll('#results tr');
-
-    if (results.length === 0) {
-        alert('No files to download.');
+    const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
+    if (selectedFiles.length === 0) {
+        alert('No files selected.');
         return;
     }
 
     const zip = new JSZip();
-    const folder = zip.folder("files");
-    const fetchPromises = [];
+    const folder = zip.folder("selected_files");
 
-    results.forEach((tr) => {
-        const fileId = tr.querySelector('a').getAttribute('href').split('/').pop();
-        const fileName = tr.children[6].innerText; // Adjust to get the file name
+    for (const checkbox of selectedFiles) {
+        const fileId = checkbox.getAttribute('data-file-id');
+        const fileName = checkbox.getAttribute('data-file-name');
 
-        // Fetch each file and add to the zip
-        const fetchPromise = fetch(`/api/files/download/${fileId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                folder.file(fileName, blob);
-            });
-
-        fetchPromises.push(fetchPromise); // Collect the promise
-    });
-
-    // Wait for all fetches to complete
-    await Promise.all(fetchPromises);
+        // Fetch file content and add it to the zip
+        const response = await fetch(`/api/files/download/${fileId}`);
+        const blob = await response.blob();
+        folder.file(fileName, blob);
+    }
 
     zip.generateAsync({ type: "blob" }).then((content) => {
-        saveAs(content, "all_files.zip");
+        saveAs(content, "selected_files.zip");
     });
 });
 

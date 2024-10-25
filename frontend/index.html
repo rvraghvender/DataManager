@@ -19,12 +19,24 @@
 
     <div class="container">
 
+        <!----------------------------------------Upload box ------------------------------------------->
         <div class="box" id="uploadBox">
             <h2>Upload</h2>
             <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
 
                 <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
 		<input type="text" id="labelName" name="label_name" placeholder="Label Name" required> <!--M-->
+
+
+		<select id="dataGenerator" name="data_generator" required>
+                    <option value="">Select Data Generator</option>
+                    <option value="eMicroscopy">Electron microscopy</option>
+                    <option value="eChemistry">Electron chemistry</option>
+                    <option value="synchrotron">Synchrotron</option>
+                    <option value="simulation">Simulation</option>
+		    <option value="ai_data">AI generated data</option> <!--M-->
+		    <option value="other">Other</option> 
+                </select>
 
 		<select id="fileType" name="file_type" required>
                     <option value="">Select File Type</option>
@@ -34,23 +46,13 @@
                 </select>
 
 
-		<select id="dataGenerator" name="data_generator" required>
-                    <option value="">Data Generator</option>
-                    <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="eChemistry">Electronic chemistry</option>
-                    <option value="synchrotron">Synchrotron</option>
-                    <option value="simulation">Simulation</option>
-		    <option value="other">Other</option> <!--M-->
-                </select>
-
-
 		<select id="chemistry" name="chemistry" required>
-                    <option value="">Chemistry</option>
+                    <option value="">Select Chemistry/Material</option>
                     <option value="nmc">NMC</option>
                     <option value="lfp">LFP</option>
 		    <option value="other">Other</option> <!--M-->
                 </select>
-                
+
 		<input type="date" id="uploadDate" name="upload_date" required>
                 
                 <textarea id="description" name="description" placeholder="Enter a description..." rows="4"></textarea> <!--M-->
@@ -68,6 +70,17 @@
                 <input type="text" id="searchOwner" placeholder="Owner Name">
 		<input type="text" id="labelName" name="label_name" placeholder="Label Name"> <!--M-->
                
+
+		<select id="dataGenerator" name="data_generator">
+                    <option value="">Select Data Generator</option>
+                    <option value="eMicroscopy">Electron microscopy</option>
+                    <option value="eChemistry">Electron chemistry</option>
+                    <option value="synchrotron">Synchrotron</option>
+                    <option value="simulation">Simulation</option>
+		    <option value="ai_data">AI generated data</option> <!--M-->
+		    <option value="other">Other</option> <!--M-->
+                </select>
+
 		<select id="searchType" name="file_type">
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
@@ -75,18 +88,9 @@
                     <option value="other">Other</option>
                 </select>
 
-
-		<select id="dataGenerator" name="data_generator">
-                    <option value="">Data Generator</option>
-                    <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="eChemistry">Electronic chemistry</option>
-                    <option value="synchrotron">Synchrotron</option>
-                    <option value="simulation">Simulation</option>
-		    <option value="other">Other</option> <!--M-->
-                </select>
                 
 		<select id="chemistry" name="chemistry">
-                    <option value="">Chemistry</option>
+                    <option value="">Select Chemistry/Material</option>
                     <option value="nmc">NMC</option>
                     <option value="lfp">LFP</option>
 		    <option value="other">Other</option> <!--M-->
@@ -120,12 +124,15 @@
 		    <th>Date</th>
 		    <th>File Name</th>
 		    <th>Description</th>
-                    <th>Download Link</th>
+                    <th>
+			    Download Link
+			    <input type="checkbox" id="selectAll"> <!--Select all checkbox -->
+		    </th>
                 </tr>
             </thead>
             <tbody id="results"></tbody>
         </table> 
-	<button id="downloadAll">Download All</button>
+	<button id="downloadAll">Download Selected Files</button>
     </div>
 
 
@@ -133,7 +140,8 @@
     <footer>
         <p>Software made by Raghvender for Arnaud's group</p>
     </footer>
-
+    
+    <!--------- Javascript file -------->
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
