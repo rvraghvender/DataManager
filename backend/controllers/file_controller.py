@@ -20,9 +20,6 @@ def upload_file():
             return jsonify(message='No files selected'), 400
 
         upload_results = []
-        
-
-        print(request.form) ##
 
         for file in files:
             if file.filename == '':
@@ -58,7 +55,8 @@ def upload_file():
                 'chemistry' : chemistry,
                 'upload_date': upload_date,
                 'file_path': file_path,
-                'description' : description
+                'description' : description,
+                'file_size' : os.path.getsize(file_path) ##
             }
 
             try:
@@ -117,6 +115,7 @@ def search_files():
                 'chemistry': file['chemistry'],
                 'upload_date': file['upload_date'].strftime('%Y-%m-%d'),  # Format date for readability
                 'description': file['description'],
+                'file_size': file['file_size'],
             }
             for file in files
         ]

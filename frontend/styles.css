@@ -154,6 +154,7 @@ th, td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
+    /* overflow: hidden;  Adds overflow control to all table cells */
 }
 
 th {
@@ -183,3 +184,27 @@ textarea {
     background-color: #22223b; /* #0056b3;  Darkens button on hover */
 }
 
+
+#fileCountContainer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#fileCount {
+    font-size: 1.5em; /* Adjust this size as needed */
+    font-weight: bold;
+}
+
+.file-name-column {
+    max-width: 150px;
+    white-space: normal;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}
+
+.description-column {
+    max-width: 250px;
+    white-space: normal;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}

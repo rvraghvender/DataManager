@@ -31,7 +31,8 @@
 		<select id="dataGenerator" name="data_generator" required>
                     <option value="">Select Data Generator</option>
                     <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="eChemistry">Electron chemistry</option>
+                    <option value="xrd">X-Ray Diffraction</option>
+                    <option value="eChemistry">Electrochemistry</option>
                     <option value="synchrotron">Synchrotron</option>
                     <option value="simulation">Simulation</option>
 		    <option value="ai_data">AI generated data</option> <!--M-->
@@ -41,15 +42,24 @@
 		<select id="fileType" name="file_type" required>
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
+                    <option value="image">Image Stack</option>
                     <option value="csv">CSV</option>
+                    <option value="text">Text</option>
+                    <option value="ai_models">AI Models</option>
 		    <option value="other">Other</option> <!--M-->
                 </select>
 
 
 		<select id="chemistry" name="chemistry" required>
-                    <option value="">Select Chemistry/Material</option>
+                    <option value="">Select Chemistry / Material</option>
                     <option value="nmc">NMC</option>
                     <option value="lfp">LFP</option>
+                    <option value="lnmo">LNMO</option>
+                    <option value="nvpf">NVPF</option>
+                    <option value="nmvp">NMVP</option>
+                    <option value="lfmp">LFMP</option>
+                    <option value="graphite">Graphite</option>
+                    <option value="hard_carbon">Hard Carbon</option>
 		    <option value="other">Other</option> <!--M-->
                 </select>
 
@@ -74,25 +84,35 @@
 		<select id="dataGenerator" name="data_generator">
                     <option value="">Select Data Generator</option>
                     <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="eChemistry">Electron chemistry</option>
+                    <option value="xrd">X-Ray Diffraction</option>
+                    <option value="eChemistry">Electrochemistry</option>
                     <option value="synchrotron">Synchrotron</option>
                     <option value="simulation">Simulation</option>
 		    <option value="ai_data">AI generated data</option> <!--M-->
-		    <option value="other">Other</option> <!--M-->
+		    <option value="other">Other</option> 
                 </select>
 
 		<select id="searchType" name="file_type">
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
+                    <option value="image">Image Stack</option>
                     <option value="csv">CSV</option>
-                    <option value="other">Other</option>
+                    <option value="text">Text</option>
+                    <option value="ai_models">AI Models</option>
+		    <option value="other">Other</option> <!--M-->
                 </select>
 
                 
 		<select id="chemistry" name="chemistry">
-                    <option value="">Select Chemistry/Material</option>
+                    <option value="">Select Chemistry / Material</option>
                     <option value="nmc">NMC</option>
                     <option value="lfp">LFP</option>
+                    <option value="lnmo">LNMO</option>
+                    <option value="nvpf">NVPF</option>
+                    <option value="nmvp">NMVP</option>
+                    <option value="lfmp">LFMP</option>
+                    <option value="graphite">Graphite</option>
+                    <option value="hard_carbon">Hard Carbon</option>
 		    <option value="other">Other</option> <!--M-->
                 </select>
 	
@@ -113,6 +133,9 @@
     <!--------- Result --------->
     <div>
         <h2>Results</h2>
+	<div id="fileCountContainer">
+		<div id="fileCount"></div>
+	</div>
         <table id="resultsTable">
             <thead>
                 <tr>
@@ -120,10 +143,10 @@
 		    <th>Label Name</th>
 		    <th>File Type</th>
 		    <th>Data Generator</th>
-		    <th>Chemistry</th>
+		    <th>Chemistry / Material</th>
 		    <th>Date</th>
-		    <th>File Name</th>
-		    <th>Description</th>
+		    <th class="file-name-column">File Name</th>
+		    <th class="description-column">Description</th>
                     <th>
 			    Download Link
 			    <input type="checkbox" id="selectAll"> <!--Select all checkbox -->

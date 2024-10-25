@@ -2,6 +2,10 @@
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const uploadButton = document.querySelector('#uploadForm button'); //
+    uploadButton.disabled = true;                                      //
+    uploadButton.textContent = 'Uploading...';                         //
+
     const formData = new FormData();
     const files = document.getElementById('file').files;
 
@@ -33,6 +37,9 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         }
     } catch (error) {
         alert(`Upload failed: ${error.message}`);
+    } finally {                                       //
+	uploadButton.disabled = false;                //
+	uploadButton.textContent = 'Upload';          //
     }
 });
 
@@ -49,6 +56,12 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
     const chemistry = document.getElementById('chemistry').value;
     const start_date = document.getElementById('startDate').value;
     const end_date = document.getElementById('endDate').value;
+
+    // Check if at least one field is filled
+    if (!owner_name && !label_name && !file_type && !data_generator && !chemistry && !start_date && !end_date) {
+        alert('Please fill in at least one search criteria.');
+        return;
+    }
 
     const queryString = new URLSearchParams({
         owner_name,
@@ -71,31 +84,20 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 
         const files = await response.json();
         const results = document.getElementById('results');
-        results.innerHTML = '';
+	    
+	results.innerHTML = '';
         
 	if (files.length === 0) {
             results.innerHTML = '<tr><td colspan="4">No results found</td></tr>'; 
         } else {
+	    let totalSize = 0;
             files.forEach(file => {
-                const fileId = file.id ? file.id : '';
-                const fileName = file.filename ? file.filename : 'Unknown';
-                const description = file.description ? file.description : 'No description available';
-        
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${file.owner_name}</td>
-                    <td>${file.label_name}</td>
-                    <td>${file.file_type}</td>
-                    <td>${file.data_generator}</td>
-                    <td>${file.chemistry}</td>
-                    <td>${file.upload_date}</td>
-		    <td>${file.filename}</td>
-                    <td>${description}</td>
-                    <td><a href="/api/files/download/${fileId}" class="download-link">Download</a></td>
-                `;
-                // results.appendChild(tr);
+		totalSize += file.file_size || 0; //
                 results.appendChild(createRow(file));
             });
+
+            const totalSizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+	    document.getElementById('fileCount').textContent = `${files.length} file(s) found (Total size: ${totalSizeInMB} MB)`;
         }
 
 
@@ -105,50 +107,10 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 });
 
 
-// Download all files
-//document.getElementById('downloadAll').addEventListener('click', async () => {
-//    const results = document.querySelectorAll('#results tr');
-//
-//    if (results.length === 0) {
-//        alert('No files to download.');
-//        return;
-//    }
-//
-//    const zip = new JSZip();
-//    const folder = zip.folder("files");
-//    const fetchPromises = [];
-//
-//    results.forEach((tr) => {
-//        const fileId = tr.querySelector('a').getAttribute('href').split('/').pop();
-//        const fileName = tr.children[6].innerText; // Adjust to get the file name
-//
-//        // Fetch each file and add to the zip
-//        const fetchPromise = fetch(`/api/files/download/${fileId}`)
-//            .then(response => {
-//                if (!response.ok) {
-//                    throw new Error(`HTTP error! status: ${response.status}`);
-//                }
-//                return response.blob();
-//            })
-//            .then(blob => {
-//                folder.file(fileName, blob);
-//            });
-//
-//        fetchPromises.push(fetchPromise); // Collect the promise
-//    });
-//
-//    // Wait for all fetches to complete
-//    await Promise.all(fetchPromises);
-//
-//    zip.generateAsync({ type: "blob" }).then((content) => {
-//        saveAs(content, "all_files.zip");
-//    });
-//});
-//
-
 // Append a checkbox next to the download link for each file row
 function createRow(file) {
     const tr = document.createElement('tr');
+    const description = file.description ? file.description : 'No description available';
     tr.innerHTML = `
         <td>${file.owner_name}</td>
         <td>${file.label_name}</td>
@@ -182,6 +144,10 @@ document.getElementById('downloadAll').addEventListener('click', async () => {
         return;
     }
 
+    const downloadButton = document.getElementById('downloadAll'); //
+    downloadButton.disabled = true;                                //
+    downloadButton.textContent = 'Preparing Download...';          //
+
     const zip = new JSZip();
     const folder = zip.folder("selected_files");
 
@@ -197,6 +163,9 @@ document.getElementById('downloadAll').addEventListener('click', async () => {
 
     zip.generateAsync({ type: "blob" }).then((content) => {
         saveAs(content, "selected_files.zip");
-    });
+    }).finally(() => {                                          //
+        downloadButton.disabled = false;                        //
+        downloadButton.textContent = 'Download Selected';       //
+    })
 });
 
