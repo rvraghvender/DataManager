@@ -26,10 +26,6 @@ def upload_file():
                 logging.error('Files with no filename selected')
                 return jsonify(message="No selected file"), 400
             
-            # Save the file to the server
-            file_path = os.path.abspath(os.path.join(UPLOAD_FOLDER, file.filename))
-            file.save(file_path)
-
             owner_name = request.form['owner_name']
             label_name = request.form['label_name']
             file_type = request.form['file_type']
@@ -39,6 +35,17 @@ def upload_file():
             description = request.form['description']
             filename = secure_filename(file.filename)
 
+            # Save the file to the server
+            folder_path = os.path.abspath(os.path.join(
+                UPLOAD_FOLDER,
+                owner_name,
+                data_generator,
+                file_type,
+                chemistry))
+            os.makedirs(folder_path, exist_ok=True)
+            file_path = os.path.join(folder_path, filename)
+            file.save(file_path)
+            
             # Convert upload_date to a datetime object
             try:
                 upload_date = datetime.strptime(file_date, '%Y-%m-%d')  # Convert to datetime

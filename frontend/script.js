@@ -49,11 +49,12 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
 document.getElementById('searchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const owner_name = document.getElementById('searchOwner').value;
-    const label_name = document.getElementById('labelName').value;
+    const owner_name = document.getElementById('searchOwnerName').value;
+    // console.log(`Owner Name: ${owner_name}`);
+    const label_name = document.getElementById('searchLabelName').value;
     const file_type = document.getElementById('searchType').value;
-    const data_generator = document.getElementById('dataGenerator').value;
-    const chemistry = document.getElementById('chemistry').value;
+    const data_generator = document.getElementById('searchDataGenerator').value;
+    const chemistry = document.getElementById('searchChemistry').value;
     const start_date = document.getElementById('startDate').value;
     const end_date = document.getElementById('endDate').value;
 

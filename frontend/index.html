@@ -24,25 +24,36 @@
             <h2>Upload</h2>
             <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
 
-                <input type="text" id="ownerName" name="owner_name" placeholder="Owner Name" required>
+		<select id="ownerName" name="owner_name" required>
+                    <option value="">Select Owner</option>
+                    <option value="ahmed_yousfi">Ahmed Yousfi</option>
+                    <option value="arnaud_demortiere">Arnaud Demortiere</option>
+                    <option value="florent_magaud">Florent Magaud</option>
+                    <option value="junhao_cao">Junhao Cao</option>
+                    <option value="justin_jean">Justine Jean</option>
+                    <option value="kevyn_moncayo">Kevyn Moncayo</option>
+                    <option value="raghvender">Raghvender</option>
+                    <option value="other">Other</option>
+                </select>
+                
 		<input type="text" id="labelName" name="label_name" placeholder="Label Name" required> <!--M-->
 
 
 		<select id="dataGenerator" name="data_generator" required>
                     <option value="">Select Data Generator</option>
-                    <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="xrd">X-Ray Diffraction</option>
-                    <option value="eChemistry">Electrochemistry</option>
-                    <option value="synchrotron">Synchrotron</option>
-                    <option value="simulation">Simulation</option>
-		    <option value="ai_data">AI generated data</option> <!--M-->
-		    <option value="other">Other</option> 
+                    <option value="ElectronMicroscopy">Electron microscopy</option>
+                    <option value="XRD">X-Ray Diffraction</option>
+                    <option value="ElectroChemistry">Electrochemistry</option>
+                    <option value="Synchrotron">Synchrotron</option>
+                    <option value="Simulation">Simulation</option>
+		    <option value="AI_data">AI generated data</option> <!--M-->
+		    <option value="Other">Other</option> 
                 </select>
 
 		<select id="fileType" name="file_type" required>
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
-                    <option value="image">Image Stack</option>
+                    <option value="image_stack">Image Stack</option>
                     <option value="csv">CSV</option>
                     <option value="text">Text</option>
                     <option value="ai_models">AI Models</option>
@@ -77,25 +88,38 @@
 	<div class="box" id="searchBox">
             <h2>Search</h2>
             <form id="searchForm">
-                <input type="text" id="searchOwner" placeholder="Owner Name">
-		<input type="text" id="labelName" name="label_name" placeholder="Label Name"> <!--M-->
+		
+		<select id="searchOwnerName" name="owner_name">
+                    <option value="">Select Owner</option>
+                    <option value="ahmed_yousfi">Ahmed Yousfi</option>
+                    <option value="arnaud_demortiere">Arnaud Demortiere</option>
+                    <option value="faycal_adrar">Faycal Adrar</option>
+                    <option value="florent_magaud">Florent Magaud</option>
+                    <option value="junhao_cao">Junhao Cao</option>
+                    <option value="justin_jean">Justine Jean</option>
+                    <option value="kevyn_moncayo">Kevyn Moncayo</option>
+                    <option value="raghvender">Raghvender</option>
+                    <option value="other">Other</option>
+                </select>
+
+		<input type="text" id="searchLabelName" name="label_name" placeholder="Label Name"> <!--M-->
                
 
-		<select id="dataGenerator" name="data_generator">
+		<select id="searchDataGenerator" name="data_generator">
                     <option value="">Select Data Generator</option>
-                    <option value="eMicroscopy">Electron microscopy</option>
-                    <option value="xrd">X-Ray Diffraction</option>
-                    <option value="eChemistry">Electrochemistry</option>
-                    <option value="synchrotron">Synchrotron</option>
-                    <option value="simulation">Simulation</option>
-		    <option value="ai_data">AI generated data</option> <!--M-->
-		    <option value="other">Other</option> 
+                    <option value="ElectronMicroscopy">Electron microscopy</option>
+                    <option value="XRD">X-Ray Diffraction</option>
+                    <option value="ElectroChemistry">Electrochemistry</option>
+                    <option value="Synchrotron">Synchrotron</option>
+                    <option value="Simulation">Simulation</option>
+		    <option value="AI_data">AI generated data</option> <!--M-->
+		    <option value="Other">Other</option> 
                 </select>
 
 		<select id="searchType" name="file_type">
                     <option value="">Select File Type</option>
                     <option value="image">Image</option>
-                    <option value="image">Image Stack</option>
+                    <option value="image_stack">Image Stack</option>
                     <option value="csv">CSV</option>
                     <option value="text">Text</option>
                     <option value="ai_models">AI Models</option>
@@ -103,7 +127,7 @@
                 </select>
 
                 
-		<select id="chemistry" name="chemistry">
+		<select id="searchChemistry" name="chemistry">
                     <option value="">Select Chemistry / Material</option>
                     <option value="nmc">NMC</option>
                     <option value="lfp">LFP</option>
