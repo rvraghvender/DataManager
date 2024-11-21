@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Update href to point to 'frontend/nas.png' -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='nas.png') }}">
     <title>NAS Database Manager</title>
+    <!-- Update the link to the stylesheet to be inside the 'frontend' folder -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Include JSZip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -14,7 +17,9 @@
 
 <body>
     <header>
-        <h1>NAS Database Manager</h1>
+        <!-- Logo before the title -->
+        <img src="{{ url_for('static', filename='nas.png') }}" alt="Logo" style="width: 80px; height: 80px; vertical-align: middle;">
+        <h1 style="display: inline; vertical-align: middle;">NAS Database Manager</h1>
     </header>
 
     <div class="container">
@@ -194,7 +199,7 @@
 
     <!--------- Result --------->
     <div>
-        <h2>Results</h2>
+        <h2 style="text-align: center;">Results</h2>
 	<div id="fileCountContainer">
 		<div id="fileCount"></div>
 	</div>

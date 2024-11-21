@@ -1,6 +1,6 @@
 from flask import Blueprint
-from controllers.file_controller import upload_file, search_files, download_file
-import logging
+from backend.controllers.file_controller import upload_file, search_files, download_file
+from backend.logger import logging
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

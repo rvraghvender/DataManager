@@ -1,20 +1,18 @@
 from flask import Flask, render_template
 from flask_cors import CORS
-from config.config import UPLOAD_FOLDER, MONGO_URI
-from routes.file_routes import file_bp
+from backend.config.config import get_config
+from backend.routes.file_routes import file_bp
 import os
-import time
-import subprocess
-import logging
-from routes.file_routes import file_bp
+from backend.logger import logging
 from dotenv import load_dotenv
-from utils.mongo_utils import check_and_start_mongodb, stop_mongodb
-
-logging.basicConfig(level=logging.INFO)
+from backend.utils.mongo_utils import check_and_start_mongodb, stop_mongodb
 
 def create_app():
     app = Flask(__name__, static_folder='../frontend', template_folder='../frontend')
     CORS(app)
+
+    CONFIG = get_config()
+    UPLOAD_FOLDER = CONFIG['UPLOAD_FOLDER']
     
     # Ensure the upload directory exists
     if not os.path.exists(UPLOAD_FOLDER):
@@ -39,7 +37,7 @@ def main():
     
     app = create_app()
     try:
-        app.run(debug=True,host='0.0.0.0',  port=5000)
+        app.run(debug=False, host='0.0.0.0',  port=5000)
     except KeyboardInterrupt:
         logging.info("Shutting down MongoDB...")
         stop_mongodb(mongo_process)

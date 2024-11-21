@@ -1,15 +1,13 @@
 import subprocess
-import logging
+from backend.logger import logging
 import os
-
-
-# Calculate the base path dynamically
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from backend.config.config import get_config
 
 # Calculate the mongod.conf path dynamically
 def get_mongod_conf_path():
+    CONFIG = get_config()
     # Assuming 'config' is the folder containing mongod.conf
-    config_path = os.path.join(BASE_PATH, 'backend', 'config', 'mongod.conf')
+    config_path = os.path.join(CONFIG['ROOT_DIR'], 'backend', 'config', 'mongod.conf')
     return config_path
 
 
@@ -17,31 +15,40 @@ def get_mongod_conf_path():
 def update_mongod_config():
     # Get the dynamic path for the config
     MONGOD_CONFIG_PATH = get_mongod_conf_path()
-
-    # Paths to the data and log directories (dynamically calculated)
-    DATA_PATH = os.path.join(BASE_PATH, 'data')
-    LOG_PATH = os.path.join(BASE_PATH, 'logs')
-
-    os.makedirs(DATA_PATH, exist_ok=True)
-    os.makedirs(LOG_PATH, exist_ok=True)
-    
+    CONFIG = get_config()    
     try:
         # Read the original configuration file
         with open(MONGOD_CONFIG_PATH, 'r') as file:
-            config_data = file.read()
+            config_data = file.readlines()
 
-        # Replace the dbPath and log path with dynamic values
-        config_data = config_data.replace("../data", DATA_PATH)
-        config_data = config_data.replace("../logs", LOG_PATH)
+        # Flag to check if dbPath and log paths were found and updated
+        dbPath_updated = False
+        logPath_updated = False
+
+        # Iterate over lines and update dbPath and systemLog.path
+        for i, line in enumerate(config_data):
+            # Check for dbPath and update if found
+            if "dbPath" in line:
+                config_data[i] = f"    dbPath: {CONFIG['MONGO_DATA_DIR']}\n"
+                dbPath_updated = True
+            # Check for systemLog.path and update if found
+            elif "path" in line and "systemLog" in config_data[i-2]:
+                config_data[i] = f"    path: {CONFIG['MONGO_LOG_DIR']}/mongod.log\n"
+                logPath_updated = True
+
+        # If dbPath or logPath were not found, append them to the file
+        if not dbPath_updated:
+            config_data.append(f"storage:\n    dbPath: {CONFIG['MONGO_DATA_DIR']}\n")
+        if not logPath_updated:
+            config_data.append(f"systemLog:\n    destination: file\n    path: {CONFIG['MONGO_LOG_DIR']}/mongod.log\n    logAppend: true\n")
 
         # Write the updated config data back to the file
         with open(MONGOD_CONFIG_PATH, 'w') as file:
-            file.write(config_data)
+            file.writelines(config_data)
 
         logging.info("Updated mongod.conf with dynamic paths.")
     except Exception as e:
         logging.error("Failed to update mongod.conf: %s", str(e))
-
 
 def check_and_start_mongodb():
     # Get the dynamic path for the config file

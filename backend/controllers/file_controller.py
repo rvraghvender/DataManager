@@ -1,12 +1,12 @@
-from flask import request, jsonify, send_from_directory
+from flask import request, jsonify, send_from_directory, send_file
 from werkzeug.utils import secure_filename
-from models.file_model import files_collection
+from backend.models.file_model import get_files_collection
+from io import BytesIO
 import os
-import logging
+from backend.logger import logging
 from bson.objectid import ObjectId
-from config.config import UPLOAD_FOLDER
+from backend.config.config import UPLOAD_FOLDER
 from datetime import datetime
-import subprocess
 from smb.SMBConnection import SMBConnection
 from dotenv import load_dotenv
 
@@ -48,11 +48,11 @@ def upload_to_nas(local_file_path, owner_name, data_generator, file_type, chemis
             try:
                 # Try listing the contents of the current directory
                 conn.listPath(smb_share, current_path)
-                logging.info(f"Directory {current_path} already exists.")
+                logging.debug(f"Directory {current_path} already exists.")
             except Exception as e:
                 # If listing the directory fails, create it
                 conn.createDirectory(smb_share, current_path)
-                logging.info(f"Directory {current_path} created successfully.")
+                logging.debug(f"Directory {current_path} created successfully.")
         except Exception as e:
             logging.error(f"Failed to create or check directory {current_path}: {str(e)}")
             # Handle error gracefully, continue to the next directory
@@ -131,6 +131,7 @@ def upload_file():
             }
 
             try:
+                files_collection = get_files_collection()  # Get the MongoDB collection
                 files_collection.insert_one(file_data)
                 upload_results.append(f'{filename} uploaded successfully')
             except Exception as e:
@@ -175,6 +176,7 @@ def search_files():
             return jsonify(message="Invalid date format. Use 'YYYY-MM-DD'"), 400
 
     try:
+        files_collection = get_files_collection()  # Get the MongoDB collection
         files = files_collection.find(query)
         results = [
             {
@@ -205,6 +207,7 @@ def download_file(file_id):
             return jsonify(message="Invalid file ID"), 400
 
         # Retrieve file metadata from Database
+        files_collection = get_files_collection()  # Get the MongoDB collection
         file_data = files_collection.find_one({'_id': ObjectId(file_id)})
         if not file_data:
             logging.warning(f"File not found for ID: {file_id}")
