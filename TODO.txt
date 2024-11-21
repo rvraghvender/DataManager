@@ -1,4 +1,4 @@
-1. Check if the file already exist. If yes, throw an error. Otherwise, it will replace the file.
+1. Check if the file already exist. If yes, throw an error. Otherwise, it will replace the file. -- DONE
 2. Add "Refresh" button to the interface, so that to update the database with the available file.
 3. Improve the logging.  -- DONE
 4. Automatically, backup the metadata (mongodb) to hard drive.

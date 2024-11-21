@@ -59,6 +59,25 @@ def upload_to_nas(local_file_path, owner_name, data_generator, file_type, chemis
             pass
     logging.info(f"Directory {nas_url} created successfully on nas.")
 
+    # Check if the file already exists on the NAS
+    try:
+        file_exists = False
+        file_list = conn.listPath(smb_share, nas_url)  # List files in the target directory
+
+        # Check if the file is already present
+        for file in file_list:
+            if file.filename == filename:
+                file_exists = True
+                break
+
+        if file_exists:
+            logging.error(f"File '{filename}' already exists on NAS at {nas_url}. Please check and try again.")
+            raise FileExistsError(f"File '{filename}' already exists on NAS. Upload aborted.")
+
+    except Exception as e:
+        logging.error(f"Error checking for existing file {filename}: {str(e)}")
+        raise
+
     # Now upload the file to the nas
     with open(local_file_path, 'rb') as file_obj:
         conn.storeFile(smb_share, os.path.join(nas_url, filename), file_obj)
