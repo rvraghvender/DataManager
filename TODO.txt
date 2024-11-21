@@ -1,0 +1,5 @@
+1. Check if the file already exist. If yes, throw an error. Otherwise, it will replace the file.
+2. Add "Refresh" button to the interface, so that to update the database with the available file.
+3. Improve the logging.
+4. Automatically, backup the metadata (mongodb) to hard drive.
+5. Configure config.toml file.

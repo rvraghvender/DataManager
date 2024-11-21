@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Manager</title>
+    <title>NAS Database Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Include JSZip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -14,20 +14,21 @@
 
 <body>
     <header>
-        <h1>Data Manager</h1>
+        <h1>NAS Database Manager</h1>
     </header>
 
     <div class="container">
 
         <!----------------------------------------Upload box ------------------------------------------->
         <div class="box" id="uploadBox">
-            <h2>Upload</h2>
+            <h2 style="text-align: center;">Upload Data</h2>
             <form id="uploadForm" action="/api/files/upload" method="POST" enctype="multipart/form-data">
 
 		<select id="ownerName" name="owner_name" required>
                     <option value="">Select Owner</option>
                     <option value="ahmed_yousfi">Ahmed Yousfi</option>
-                    <option value="arnaud_demortiere">Arnaud Demortiere</option>
+                    <option value="arash_jamali">Arash Jamali</option>
+		    <option value="arnaud_demortiere">Arnaud Demortiere</option>
                     <option value="florent_magaud">Florent Magaud</option>
                     <option value="junhao_cao">Junhao Cao</option>
                     <option value="justin_jean">Justine Jean</option>
@@ -62,18 +63,37 @@
                 </select>
 
 
-		<select id="chemistry" name="chemistry" required>
-                    <option value="">Select Chemistry / Material</option>
-                    <option value="nmc">NMC</option>
-                    <option value="lfp">LFP</option>
-                    <option value="lnmo">LNMO</option>
-                    <option value="nvpf">NVPF</option>
-                    <option value="nmvp">NMVP</option>
-                    <option value="lfmp">LFMP</option>
-                    <option value="graphite">Graphite</option>
-                    <option value="hard_carbon">Hard Carbon</option>
-		    <option value="other">Other</option> <!--M-->
-                </select>
+                <select id="chemistry" name="chemistry" required> 
+                   <option value="">Select Chemistry / Material</option>
+                   
+		   <!-- Cathode -->
+                   <optgroup label="Cathode">
+                        <option value="nmc">NMC</option>
+                        <option value="lfp">LFP</option>
+                        <option value="lnmo">LNMO</option>
+                        <option value="nvpf">NVPF</option>
+                        <option value="nmvp">NMVP</option>
+                        <option value="lfmp">LFMP</option>
+                   </optgroup>
+                   
+		   <!-- Anode -->
+                   <optgroup label="Anode">
+                        <option value="graphite">Graphite</option>
+                        <option value="hard_carbon">Hard Carbon</option>
+                   </optgroup>
+                   
+		   <!-- Battery -->
+                   <optgroup label="Battery">
+                       <option value="nmc_graphite">NMC/Graphite</option>
+                       <option value="lfp_graphite">LFP/Graphite</option>
+                       <option value="lfmp_graphite">LFMP/Graphite</option>
+                       <option value="nvpf_hc">NVPF/Hard Carbon</option>
+                   </optgroup>
+               
+		   <!-- Other option -->
+                   <option value="other">Other</option>
+               </select>
+
 
 		<input type="date" id="uploadDate" name="upload_date" required>
                 
@@ -87,13 +107,14 @@
         <!--------------------------------Search Box ----------------------------------------->
         
 	<div class="box" id="searchBox">
-            <h2>Search</h2>
+            <h2 style="text-align: center;">Search Data</h2>
             <form id="searchForm">
 		
 		<select id="searchOwnerName" name="owner_name">
                     <option value="">Select Owner</option>
                     <option value="ahmed_yousfi">Ahmed Yousfi</option>
-                    <option value="arnaud_demortiere">Arnaud Demortiere</option>
+                    <option value="arash_jamali">Arash Jamali</option>
+		    <option value="arnaud_demortiere">Arnaud Demortiere</option>
                     <option value="faycal_adrar">Faycal Adrar</option>
                     <option value="florent_magaud">Florent Magaud</option>
                     <option value="junhao_cao">Junhao Cao</option>
@@ -129,19 +150,34 @@
                 </select>
 
                 
-		<select id="searchChemistry" name="chemistry">
-                    <option value="">Select Chemistry / Material</option>
-                    <option value="nmc">NMC</option>
-                    <option value="lfp">LFP</option>
-                    <option value="lnmo">LNMO</option>
-                    <option value="nvpf">NVPF</option>
-                    <option value="nmvp">NMVP</option>
-                    <option value="lfmp">LFMP</option>
-                    <option value="graphite">Graphite</option>
-                    <option value="hard_carbon">Hard Carbon</option>
-		    <option value="other">Other</option> <!--M-->
-                </select>
-	
+                <select id="searchChemistry" name="chemistry">
+                   <option value="">Select Chemistry / Material</option>
+                   <!-- Cathode group -->
+                   <optgroup label="Cathode">
+                       <option value="nmc">NMC</option>
+                       <option value="lfp">LFP</option>
+                       <option value="lnmo">LNMO</option>
+                       <option value="nvpf">NVPF</option>
+                       <option value="nmvp">NMVP</option>
+                       <option value="lfmp">LFMP</option>
+                   </optgroup>
+                   <!-- Anode group -->
+                   <optgroup label="Anode">
+                       <option value="graphite">Graphite</option>
+                       <option value="hard_carbon">Hard Carbon</option>
+                   </optgroup>
+                   <!-- Battery -->
+                   <optgroup label="Battery">
+                       <option value="nmc_graphite">NMC/Graphite</option>
+                       <option value="lfp_graphite">LFP/Graphite</option>
+                       <option value="lfmp_graphite">LFMP/Graphite</option>
+                       <option value="nvpf_hc">NVPF/Hard Carbon</option>
+                   </optgroup>
+                   <!-- Other option -->
+                   <option value="other">Other</option>
+               </select>
+
+
 		<div class="date-fields">
 			<label for="startDate">Start Date:</label>
                 	<input type="date" id="startDate" name="start_date">
