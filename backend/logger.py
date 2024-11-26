@@ -5,33 +5,32 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from backend.config.config import get_config
 
+# Load config settings
 CONFIG = get_config()
 
-LOG_FILE = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"
+# Set up log file naming and directory structure
+LOG_FILE = f"{datetime.now().strftime('%y_%m_%d_%H_%M_%S')}.log"
 logs_path = CONFIG['LOG_DIR']
 os.makedirs(logs_path, exist_ok=True)
 
 LOG_FILE_PATH = os.path.join(logs_path, LOG_FILE)
+LOG_FORMAT = "[ %(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(module)s - %(message)s"
 
+# Create a rotating file handler with a 10MB max file size and 5 backups
+rotating_handler = RotatingFileHandler(LOG_FILE_PATH, maxBytes=10*1024*1024, backupCount=5)
+rotating_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+
+# Configure logging to write to both file and console
 logging.basicConfig(
-    # filename=LOG_FILE_PATH,
-    format="[ %(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(module)s - %(message)s",
     level=logging.INFO,
     handlers=[
-        logging.FileHandler(LOG_FILE_PATH),
+        rotating_handler,
         logging.StreamHandler(sys.stdout)
     ]
 )
 
-############################################################
-'''                       Additional things              '''
 
-# Create a rotating file handler
-""" 10 MB max size, keep 5 backup copies """ 
-# rotating_handler = RotatingFileHandler(LOG_FILE_PATH, maxBytes=10*1024*1024, backupCount=5)  
-# rotating_handler.setFormatter(logging.Formatter("[ %(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(message)s"))
-# logging.getLogger().addHandler(rotating_handler)
-
-
+# Main execution (used when running standalone or for application setup)
 if __name__ == "__main__":
-    logging.info("Loggin has started.")
+    logging.info("Logging has started.")
+

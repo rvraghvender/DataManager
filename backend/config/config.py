@@ -22,10 +22,13 @@ os.makedirs(MONGO_LOG_DIR, exist_ok=True)
 MONGO_PORT = os.getenv("MONGO_PORT", 27017)
 MONGO_LOG_FILE = os.path.join(MONGO_LOG_DIR, "mongod.log")
 
+UPLOAD_CHUNK_SIZE = 50  # In MB
+
 def get_config():
     return {
         "MONGO_URI": MONGO_URI,
         "ROOT_DIR": ROOT_DIR,
+        "UPLOAD_CHUNK_SIZE": UPLOAD_CHUNK_SIZE,
         "UPLOAD_FOLDER": UPLOAD_FOLDER,
         "LOG_DIR": LOG_DIR,
         "DATABASE_NAME": DATABASE_NAME,
